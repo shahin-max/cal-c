@@ -1,65 +1,32 @@
-import { useState } from 'react';
-import './App.css';
+import Wrapper from "./components/Wrapper";
+import Screen from "./components/Screen";
+import ButtonBox from './components/ButtonBox'
+import Button from './components/Button'
+import CalcProvider from "./context/CalcContext";
+
+const btnValues = [
+  ["C", "+-", "%", "/"],
+  [7, 8, 9, "x"],
+  [4, 5, 6, "-"],
+  [1, 2, 3, "+"],
+  [0, ".", "="],
+];
+
 function App() {
-
-  const arr = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-    '+', '-', '/', '*', '=', 'C', '.'
-  ]
-  const [value, setValue] = useState('');
-
-  const handleChange = (e) => {
-    console.log(e.target.value);
-    setValue(e.target.value);
-  }
-  const handleClick = (e) => {
-    const id = e.target.id;
-    if (id === 'C') {
-      setValue('');
-    } else if (id === '=') {
-      //produce a result
-      handleSubmit();
-    } else {
-      setValue((val) => val + id);
-    }
-    console.log();
-  }
-
-  const handleSubmit = (e) => {
-    e?.preventDefault();
-    try {
-      const ans = eval(value);
-      setValue(ans);
-    } catch (err) {
-      alert("Invalid Inputs")
-    }
-  }
-  console.log(value);
   return (
-    <div className="App">
-      <h1>Calculator</h1>
-      <form
-        onSubmit={handleSubmit}
-      >
-        <input
-          value={value}
-          onChange={handleChange}
-          type='text'
-        />
-      </form>
-      <div className='container'
-        onClick={handleClick}
-      >
-        {
-          arr.map((item, idx) => (
-            <button
-              id={item}
-              key={idx}
-              className='cell'
-            >{item}</button>
-          ))
-        }
-      </div>
-    </div>
+    <CalcProvider>
+      <Wrapper>
+        <Screen />
+        <ButtonBox>
+          {btnValues.flat().map((btn, i) => (
+            <Button
+              value={btn}
+              key={i}
+            />
+          ))}
+        </ButtonBox>
+      </Wrapper>
+    </CalcProvider>
   );
 }
 
